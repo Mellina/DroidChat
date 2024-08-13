@@ -17,7 +17,6 @@ import com.bassul.droidchat.ui.theme.DroidChatTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             DroidChatTheme {
                 ChatApp()
