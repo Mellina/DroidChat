@@ -22,10 +22,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.bassul.droidchat.R
+import com.bassul.droidchat.ui.extension.getVisualTransformationForPassword
 import com.bassul.droidchat.ui.theme.ColorError
 import com.bassul.droidchat.ui.theme.DroidChatTheme
 
@@ -45,7 +44,8 @@ fun PrimaryTextField(
     var passwordVisible by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
-        OutlinedTextField(value = value,
+        OutlinedTextField(
+            value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
@@ -63,7 +63,7 @@ fun PrimaryTextField(
             },
             trailingIcon = {
                 if (keyboardType == KeyboardType.Password && value.isNotEmpty()) {
-                    val visibilityIcon = if(passwordVisible) {
+                    val visibilityIcon = if (passwordVisible) {
                         R.drawable.ic_visibility
                     } else {
                         R.drawable.ic_visibility_off
@@ -78,17 +78,12 @@ fun PrimaryTextField(
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }
-            }, visualTransformation = if (keyboardType == KeyboardType.Password) {
-                if (passwordVisible) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                }
-            } else {
-                VisualTransformation.None
             },
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType,
-                imeAction = imeAction),
+            visualTransformation = keyboardType.getVisualTransformationForPassword(passwordVisible),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = imeAction
+            ),
             singleLine = true,
             shape = CircleShape,
             colors = OutlinedTextFieldDefaults.colors(
