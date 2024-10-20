@@ -16,10 +16,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +38,7 @@ import com.bassul.droidchat.ui.components.ProfilePictureSelector
 import com.bassul.droidchat.ui.components.SecondaryTextField
 import com.bassul.droidchat.ui.theme.BackgroundGradient
 import com.bassul.droidchat.ui.theme.DroidChatTheme
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -123,11 +126,27 @@ fun SignUpScreen() {
                 }
             }
 
+
+            val sheetState = rememberModalBottomSheetState()
+            val scope = rememberCoroutineScope()
             if (openProfilePictureOptionsModalBottomSheet) {
                 ProfilePictureOptionsModalBottomSheet(
+                    onPictureSelected = { uri ->
+                        profilePictureSelectedUri = uri
+                        openProfilePictureOptionsModalBottomSheet = false
+                      /*  scope.launch {
+                            sheetState.hide()
+                        }*//*.invokeOnCompletion {
+                            if(!sheetState.isVisible) {
+                                openProfilePictureOptionsModalBottomSheet = false
+                            }
+                        }*/
+
+                    },
                     onDismissRequest = {
                         openProfilePictureOptionsModalBottomSheet = false
-                    })
+                    },
+                    sheetState = sheetState)
 
             }
 
